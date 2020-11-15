@@ -4,31 +4,114 @@ import { css } from "@emotion/react"
 import useSound from "use-sound"
 
 const Record = ({ album }) => {
-  const [isHovering, setIsHovering] = useState(false)
-  const [play, { stop, isPlaying }] = useSound(album.album_sample, { interrupt: true})
-
+  const [play, { stop, isPlaying }] = useSound(album.album_sample, {
+    interrupt: false,
+  })
+  const [open, setOpen] = useState("10px")
   return (
     <div
       css={css`
-        display: block;
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        text-align: center;
+        min-height: 400px;
+        position: relative;
       `}
       className="entry threes"
       id="vinyl-record"
-      onMouseEnter={() => {
-        setIsHovering(true);
-        play();
-      }}
-      onMouseLeave={() => {
-        setIsHovering(false);
-        stop();
+      onClick={e => {
+        open === "10px" ? setOpen("190px") : setOpen("10px")
+        isPlaying ? stop() : setTimeout(play, 2500)
       }}
     >
       <div
-        isHovering={isHovering}
         css={css`
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: rotate(90deg);
+          width: 160px;
+          height: 160px;
+          margin-left: -80px;
+          margin-top: -40px;
+          background: linear-gradient(
+              50deg,
+              rgba(255, 255, 255, 0) 40%,
+              rgba(255, 255, 255, 0.15) 50%,
+              rgba(255, 255, 255, 0) 60%
+            ),
+            linear-gradient(
+              -50deg,
+              rgba(255, 255, 255, 0) 40%,
+              rgba(255, 255, 255, 0.15) 50%,
+              rgba(255, 255, 255, 0) 60%
+            ),
+            repeating-radial-gradient(
+              circle,
+              #333 0,
+              #333 2px,
+              #444 2px,
+              #444 4px
+            );
+          border-radius: 50%;
+          -webkit-box-shadow: -3px -3px 2px rgba(0, 0, 0, 0.2);
+          box-shadow: -3px -3px 2px rgba(0, 0, 0, 0.2);
+          &:before {
+              ${isPlaying && "animation: spin linear 1s infinite;"}
+              display: block;
+              content: "";
+              position: absolute;
+              width: 45px;
+              height: 45px;
+              margin-left: -22.5px;
+              margin-top: -22.5px;
+              top: 50%;
+              left: 50%;
+              background-color: #f5f5dc;
+              background-image: radial-gradient(
+                  circle,
+                  #333 5px,
+                  transparent 5px
+                ),
+                -webkit-gradient(linear, left top, left bottom, color-stop(35%, #d2b48c), color-stop(35%, transparent));
+              background-image: radial-gradient(
+                  circle,
+                  #333 5px,
+                  transparent 5px
+                ),
+                linear-gradient(to bottom, #d2b48c 35%, transparent 35%);
+              border-radius: 50%;
+              -webkit-box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.3);
+              box-shadow: 0 0 0 10px rgba(0, 0, 0, 0.3);
+            }
+          }
           &:after {
+            display: block;
+            content: "";
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            margin-left: -8px;
+            top: ${open};
+            transition: top 2s ease-in-out 0s;
+            background-color: #f7f7f7;
+            border-radius: 4px;
+            background-size: cover;
+            transform: rotate(-90deg);
+            border: 8px solid #f7f7f7;
+            -webkit-box-shadow: 0 -2px 3px rgba(0, 0, 0, 0.1),
+              0 -12px 0 -3px white, -4px -4px 2px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 -2px 3px rgba(0, 0, 0, 0.1), 0 -12px 0 -3px white,
+              -4px -4px 2px rgba(0, 0, 0, 0.1);
             background-image: url("${album.album_cover_img}");
           }
+
         `}
       ></div>
     </div>
