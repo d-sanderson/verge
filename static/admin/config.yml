@@ -13,6 +13,6 @@ collections:
     identifier_field: album_name
     fields:
       - { name: album_name, label: Album Name }
-      - { name: artist_name, label: Aertist Name }
-      - { name: album_cover_img, label: Splash Body, widget: image }
+      - { name: artist_name, label: Artist Name }
+      - { name: album_cover_img, label: Album Cover Image, widget: image }
       - { name: album_sample, label: Album Sample, widget: file }

@@ -1,24 +1,34 @@
-import React from "react"
-import './record.css'
-const Record = () => {
-  const audioURL =
-    "https://assets.codepen.io/911157/Carly_Simon_Youre_So_Vain.mp3"
+import React, { useEffect, useState } from "react"
+import "./record.css"
+import { css } from "@emotion/react"
+import useSound from "use-sound"
 
-  let isAudioPlaying = false
-
-  var audio = new Audio(audioURL)
-
-  function pause() {
-    audio.pause()
-  }
-  function play() {
-    setTimeout(function () {
-      audio.play()
-    }, 2500)
-  }
+const Record = ({ album }) => {
+  const [isSelected, setIsSelected] = useState(false)
+  const [play, { stop }] = useSound(album.album_sample)
+  useEffect(() => {
+    isSelected ? play() : stop()
+    return () => {
+      stop()
+    }
+  }, [isSelected])
   return (
-    <div class="entry threes" id="vinyl-record" onMouseOver={play} onMouseOut={pause}>
-      <div></div>
+    <div
+      css={css`
+        display: block;
+      `}
+      className="entry threes"
+      id="vinyl-record"
+      onMouseEnter={() => setIsSelected(true)}
+      onMouseLeave={() => setIsSelected(false)}
+    >
+      <div
+        css={css`
+          &:after {
+            background-image: url("${album.album_cover_img}");
+          }
+        `}
+      ></div>
     </div>
   )
 }
