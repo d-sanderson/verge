@@ -1,17 +1,12 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import "./record.css"
 import { css } from "@emotion/react"
 import useSound from "use-sound"
 
 const Record = ({ album }) => {
-  const [isSelected, setIsSelected] = useState(false)
-  const [play, { stop }] = useSound(album.album_sample)
-  useEffect(() => {
-    isSelected ? play() : stop()
-    return () => {
-      stop()
-    }
-  }, [isSelected])
+  const [isHovering, setIsHovering] = useState(false)
+  const [play, { stop, isPlaying }] = useSound(album.album_sample, { interrupt: true})
+
   return (
     <div
       css={css`
@@ -19,10 +14,17 @@ const Record = ({ album }) => {
       `}
       className="entry threes"
       id="vinyl-record"
-      onMouseEnter={() => setIsSelected(true)}
-      onMouseLeave={() => setIsSelected(false)}
+      onMouseEnter={() => {
+        setIsHovering(true);
+        play();
+      }}
+      onMouseLeave={() => {
+        setIsHovering(false);
+        stop();
+      }}
     >
       <div
+        isHovering={isHovering}
         css={css`
           &:after {
             background-image: url("${album.album_cover_img}");
