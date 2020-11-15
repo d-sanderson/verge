@@ -7,10 +7,24 @@ const Record = ({ album }) => {
   const [play, { stop, isPlaying }] = useSound(album.album_sample, {
     interrupt: false,
   })
+  const DEFAULT_ALBUM_COVER = `background-image: linear-gradient(
+    -45deg,
+    #be0974 20px,
+    #da6a57 20px,
+    #da6a57 40px,
+    #eebc31 40px,
+    #eebc31 60px,
+    #92a25b 60px,
+    #92a25b 80px,
+    #46a7c0 80px,
+    #46a7c0 100px,
+    transparent 100px
+  );`
   const [open, setOpen] = useState("10px")
   return (
     <div
       css={css`
+      cursor: ${isPlaying ? 'pointer' : 'grab'};
         @keyframes spin {
           from {
             transform: rotate(0deg);
@@ -109,7 +123,11 @@ const Record = ({ album }) => {
               0 -12px 0 -3px white, -4px -4px 2px rgba(0, 0, 0, 0.1);
             box-shadow: 0 -2px 3px rgba(0, 0, 0, 0.1), 0 -12px 0 -3px white,
               -4px -4px 2px rgba(0, 0, 0, 0.1);
-            background-image: url("${album.album_cover_img}");
+              ${
+                album.album_cover_img
+                  ? `background-image: url("${album.album_cover_img}");`
+                  : DEFAULT_ALBUM_COVER
+              }
           }
 
         `}
