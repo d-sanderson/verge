@@ -1,12 +1,21 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import "./record.css"
 import { css } from "@emotion/react"
 import useSound from "use-sound"
 
 const Record = ({ album }) => {
+  const OPEN = "190px"
+  const CLOSED = "10px"
+  const [isOpen, setIsOpen] = useState(CLOSED)
   const [play, { stop, isPlaying }] = useSound(album.album_sample, {
     interrupt: false,
   })
+  useEffect(() => {
+    if (!isPlaying) {
+      setIsOpen(CLOSED)
+    }
+  }, [isPlaying])
+
   const DEFAULT_ALBUM_COVER = `background-image: linear-gradient(
     -45deg,
     #be0974 20px,
@@ -20,11 +29,10 @@ const Record = ({ album }) => {
     #46a7c0 100px,
     transparent 100px
   );`
-  const [open, setOpen] = useState("10px")
   return (
     <div
       css={css`
-      cursor: ${isPlaying ? 'pointer' : 'grab'};
+        cursor: ${isPlaying ? "pointer" : "grab"};
         @keyframes spin {
           from {
             transform: rotate(0deg);
@@ -39,8 +47,8 @@ const Record = ({ album }) => {
       `}
       className="entry threes"
       id="vinyl-record"
-      onClick={e => {
-        open === "10px" ? setOpen("190px") : setOpen("10px")
+      onClick={_ => {
+        isOpen === CLOSED ? setIsOpen(OPEN) : setIsOpen(CLOSED)
         isPlaying ? stop() : setTimeout(play, 2500)
       }}
     >
@@ -112,7 +120,7 @@ const Record = ({ album }) => {
             width: 160px;
             height: 160px;
             margin-left: -8px;
-            top: ${open};
+            top: ${isOpen};
             transition: top 2s ease-in-out 0s;
             background-color: #f7f7f7;
             border-radius: 4px;
